@@ -3,8 +3,9 @@
 
 
 这是一个专为小米 17 Pro 系列（背屏机型）打造的 MAML 动态小部件。它通过解析系统底层的“焦点通知”数据流，将你的日历日程实时、优雅地呈现在背屏上。
-<img width="1123" height="2414" alt="long" src="https://github.com/user-attachments/assets/13374f14-9a10-40f5-9a36-b44def7606c1" />
-<img width="1123" height="2414" alt="short" src="https://github.com/user-attachments/assets/2710479c-074b-415b-b1c3-8d3d85f34e7a" />
+
+<img width="200" height="430"  src="https://github.com/juzipaome/Xiaomi-RearScreen-Schedule/blob/main/long.png" />     <img width="200" height="430"  src="https://github.com/juzipaome/Xiaomi-RearScreen-Schedule/blob/main/short.png" />
+
 
 ---
 
