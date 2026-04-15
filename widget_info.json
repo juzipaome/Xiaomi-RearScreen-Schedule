@@ -5,12 +5,3 @@
     "id": "schedule_reminder",
     "renameable": false
   },
-
-  "card_setup": {
-    "name": "日历日程",
-    "package": "hk.uwu.reareye",
-    "priority": 500,
-    "sticky": true,
-    "renameable": false
-  }
-}
