@@ -1,0 +1,122 @@
+<Widget frameRate="60" useVariableUpdater="DateTime.Hour,DateTime.Minute" scaleByDensity="false" screenWidth="1080" version="2" transparentSurface="true">
+  <Var name="q200Width" type="number" expression="904"/>
+  <Var name="q200Height" type="number" expression="572"/>
+  <Var name="q200ScreenRatio" type="number" expression="(#q200Width / #q200Height)"/>
+  <Var name="p2Width" type="number" expression="976"/>
+  <Var name="p2Height" type="number" expression="596"/>
+  <Var name="p2ScreenRatio" type="number" expression="(#p2Width / #p2Height)"/>
+  <Var name="realScreenRatio" type="number" expression="(#view_width / #view_height)"/>
+  <Var name="diffWithQ200" type="number" expression="abs((#realScreenRatio - #q200ScreenRatio))"/>
+  <Var name="diffWithP2" type="number" expression="abs((#realScreenRatio - #p2ScreenRatio))"/>
+  <Var name="isQ200" type="number" expression="(#diffWithQ200 { #diffWithP2)"/>
+  <Var name="scale" type="number" expression="ifelse(#isQ200,(#view_width / 336),((#view_width / 364) * 1.047))"/>
+  <Var name="font_path_style_system" type="string" expression="'/system/fonts/MiSansVF.ttf'"/>
+  
+  <Var name="is_aod" type="number" expression="0" const="true"/>
+
+  <Var name="data" type="jsonO" expression="newJsonObject()" const="true"/>
+  <Var name="param_v2" type="jsonO" expression="newJsonObject()" const="true"/>
+  <Var name="package_name" type="string" expression="''" const="true"/>
+  <Var name="line2_text" type="string" expression="''" const="true"/>
+  <Var name="line3_text" type="string" expression="''" const="true"/>
+  <Var name="blue_normal" type="string" expression="'#1E88E5'" const="true"/>
+  <Var name="blue_aod" type="string" expression="'#64B5F6'" const="true"/>
+
+  <Function name="initData">
+    <VariableCommand name="package_name" expression="@miui.rare.param.package_name" type="string"/>
+    <VariableCommand name="raw_str" expression="@miui.focus.param" type="string"/>
+    <VariableCommand name="clean_str" expression="strReplaceAll(strReplaceAll(strReplaceAll(@raw_str, '\n', ''), '\r', ''), '\', '')" type="string"/>
+    <VariableCommand name="data" expression="strToJson(@clean_str)" type="jsonO"/>
+    <VariableCommand name="param_v2" expression="jsonGetObject($data, 'param_v2')" type="jsonO"/>
+    
+    <IfCommand ifCondition="eqs(@package_name, 'com.android.calendar')">
+      <Consequent>
+        <VariableCommand name="baseInfo" expression="jsonGetObject($param_v2, 'baseInfo')" type="jsonO"/>
+        <VariableCommand name="line2_text" expression="jsonGetString($baseInfo, 'title')" type="string"/>
+        <VariableCommand name="param_island" expression="jsonGetObject($param_v2, 'param_island')" type="jsonO"/>
+        <VariableCommand name="bigIslandArea" expression="jsonGetObject(jsonGetObject($param_island, 'bigIslandArea'), 'textInfo')" type="jsonO"/>
+        <VariableCommand name="line3_text" expression="jsonGetString($bigIslandArea, 'title')" type="string"/>
+      </Consequent>
+      <Alternate>
+        <VariableCommand name="line2_text" expression="jsonGetString($data, 'title')" type="string"/>
+      </Alternate>
+    </IfCommand>
+    
+    <VariableCommand name="line2_text" expression="strReplaceAll(@line2_text,'&lt;font[^>]*>|&lt;/font>','')" type="string"/>
+    <VariableCommand name="line3_text" expression="strReplaceAll(@line3_text,'&lt;font[^>]*>|&lt;/font>','')" type="string"/>
+  </Function>
+
+  <Rectangle w="#view_width" h="#view_height" cornerRadius="0" alpha="255" fillColor="#000000"/>
+  
+  <Image name="bg_aod" w="#view_width" h="#view_height" srcExp="'assets/bg_aod.png'" folmeMode="true" alpha="0"/>
+  <Image name="bg" w="#view_width" h="#view_height" srcExp="'assets/bg.png'" folmeMode="true" alpha="255"/>
+
+  <Image name="main_image" x="(123 * #scale)" y="(28 * #scale)" w="(74 * #scale)" h="(74 * #scale)" src="assets/calendar.png" folmeMode="true" alpha="ifelse(#is_aod, 180, 255)"/>
+
+  <Group name="t1" x="(103 * #scale)" y="(82 * #scale)" folmeMode="true" alpha="255">
+    <Text name="line2_t1" x="(20 * #scale)" y="(17 * #scale)" width="(193 * #scale)" align="left" size="(32 * #scale)" fontPath="@font_path_style_system" textExp="@line2_text" color="#000000" fontPathWeight="450" multiLine="true" lineClamp="2" ellipsis="true"/>
+    <Text x="(20 * #scale)" y="((18 * #scale) + #line2_t1.text_height)" width="(193 * #scale)" align="left" size="(14 * #scale)" fontPath="@font_path_style_system" color="@blue_normal" textExp="@line3_text" fontPathWeight="500" ellipsis="true"/>
+  </Group>
+
+  <Group name="t2" x="(103 * #scale)" y="(82 * #scale)" folmeMode="true" alpha="0">
+    <Text x="(20 * #scale)" y="(17 * #scale)" width="(193 * #scale)" align="left" size="(32 * #scale)" fontPath="@font_path_style_system" textExp="@line2_text" color="#FFFFFF" alpha="200" fontPathWeight="450" multiLine="true" lineClamp="2" ellipsis="true"/>
+    <Text x="(20 * #scale)" y="((18 * #scale) + #line2_t1.text_height)" width="(193 * #scale)" align="left" size="(14 * #scale)" fontPath="@font_path_style_system" color="@blue_aod" alpha="220" textExp="@line3_text" fontPathWeight="500" ellipsis="true"/>
+  </Group>
+
+  <Group>
+    <FolmeState name="folme_state_0" alpha="0"/> 
+    <FolmeConfig name="folme_config_0" ease="-2, 1,0.5"/>
+    <FolmeState name="folme_state_1" alpha="0"/> 
+    <FolmeConfig name="folme_config_1" ease="-2, 1,0.5"/>
+    
+    <FolmeState name="folme_state_2" alpha="255"/> 
+    <FolmeConfig name="folme_config_2" ease="-2, 1,0.72"/>
+    <FolmeState name="folme_state_3" alpha="255"/> 
+    <FolmeConfig name="folme_config_3" ease="-2, 1,0.72" onComplete="'folme_oncomplete_4'"/>
+    
+    <Function name="folme_oncomplete_4">
+      <FrameRateCommand rate="0"/>
+    </Function>
+    
+    <FolmeState name="folme_state_4" alpha="255"/> 
+    <FolmeConfig name="folme_config_4" ease="-2, 1,0.72"/>
+    <FolmeState name="folme_state_5" alpha="255"/> 
+    <FolmeConfig name="folme_config_5" ease="-2, 1,0.72"/>
+    <FolmeState name="folme_state_6" alpha="0"/> 
+    <FolmeConfig name="folme_config_6" ease="-2, 1,0.5"/>
+    <FolmeState name="folme_state_7" alpha="0"/> 
+    <FolmeConfig name="folme_config_7" ease="-2, 1,0.5"/>
+  </Group>
+
+  <ExternalCommands>
+    <Trigger action="enterAod">
+      <VariableCommand name="is_aod" expression="1" type="number"/>
+      <FolmeCommand target="bg" states="'folme_state_0'" config="'folme_config_0'" command="to"/>
+      <FolmeCommand target="t1" states="'folme_state_1'" config="'folme_config_1'" command="to"/>
+      <FolmeCommand target="t2" states="'folme_state_2'" config="'folme_config_2'" command="to"/>
+      <FolmeCommand target="bg_aod" states="'folme_state_3'" config="'folme_config_3'" command="to"/>
+    </Trigger>
+    
+    <Trigger action="exitAod">
+      <VariableCommand name="is_aod" expression="0" type="number"/>
+      <FrameRateCommand rate="120"/>
+      <FolmeCommand target="bg" states="'folme_state_4'" config="'folme_config_4'" command="to"/>
+      <FolmeCommand target="t1" states="'folme_state_5'" config="'folme_config_5'" command="to"/>
+      <FolmeCommand target="t2" states="'folme_state_6'" config="'folme_config_6'" command="to"/>
+      <FolmeCommand target="bg_aod" states="'folme_state_7'" config="'folme_config_7'" command="to"/>
+    </Trigger>
+
+    <Trigger action="init">
+      <FunctionCommand target="initData"/>
+    </Trigger>
+    <Trigger action="notification_received">
+      <FunctionCommand target="initData"/>
+    </Trigger>
+    <Trigger action="resume">
+      <MultiCommand condition="(! #is_aod)">
+        <FrameRateCommand rate="120"/>
+        <FunctionCommand target="initData"/>
+      </MultiCommand>
+    </Trigger>
+  </ExternalCommands>
+</Widget>
