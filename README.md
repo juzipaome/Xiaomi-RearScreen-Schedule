@@ -4,6 +4,8 @@
 
 这是一个专为小米 17 Pro 系列（背屏机型）打造的 MAML 动态小部件。它通过解析系统底层的“焦点通知”数据流，将你的日历日程实时、优雅地呈现在背屏上。
 
+使用方法：下载REAREye模块并激活后，导入项目压缩包，id填写schedule_reminder，之后重启作用域即可。
+
 <img width="200" height="430"  src="https://github.com/juzipaome/Xiaomi-RearScreen-Schedule/blob/main/long.png" />     <img width="200" height="430"  src="https://github.com/juzipaome/Xiaomi-RearScreen-Schedule/blob/main/short.png" />
 
 
